@@ -15,13 +15,16 @@
   - [jQuery の読み込み方](#jquery-の読み込み方)
     - [自分のサーバに設置する場合](#自分のサーバに設置する場合)
     - [GoogleサーバーのCDNを読み込む場合](#googleサーバーのcdnを読み込む場合)
-  - [図解](#図解)
+  - [図-1](#図-1)
   - [CSS - 非表示](#css---非表示)
   - [関数の書き方](#関数の書き方)
     - [関数を使用しない場合](#関数を使用しない場合)
     - [関数を使用する場合](#関数を使用する場合)
   - [::before,::after、content](#beforeaftercontent)
     - [例１）リストの最後にフロートの解除を行う](#例１リストの最後にフロートの解除を行う)
+  - [data](#data)
+    - [\[ \]で囲み値を含めて指定することでセレクタとして使用可能](#-で囲み値を含めて指定することでセレクタとして使用可能)
+    - [data()とattr()の違い](#dataとattrの違い)
 
 
 ## ready()
@@ -108,7 +111,7 @@ $('#hoge').html('あいうえお');
 ```
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 ```
-## 図解
+## 図-1
 ![基本構文](./img/img01.png);
 
 ## CSS - 非表示
@@ -168,3 +171,55 @@ ul li {
     overflow: hidden;
 }
 ```
+
+## data
+data-〇〇="値"
+* 〇〇は大文字は不可
+* 〇〇は「半角英数字」「-」「_」「.」
+* 値にあたる部分は取得時に「文字列」として扱う。数値とする場合はキャストが必用
+
+```
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+	$(function(){
+	    $('li').click(function(){
+	        var text = $(this).text() + 'は' + $(this).data('age') + '歳の' + $(this).data('gender');
+	        $('.result').text(text);
+	    });
+	});
+</script>
+</head>
+<body>
+<p>リストをクリックしてください</p>
+<ul>
+    <li data-age="10" data-gender="男の子">のび太</li>
+    <li data-age="10" data-gender="女の子">しずか</li>
+</ul>
+<p class="result">ここに結果を表示します</p>
+</body>
+
+```
+
+### [ ]で囲み値を含めて指定することでセレクタとして使用可能
+```
+<ul>
+  <li data-name="test1">テスト１</li>
+  <li data-name="test2">テスト２</li>
+  <li data-name="test3">テスト３</li>
+</ul>
+
+<script>
+$(function(){
+  console.log( $('data-name="test1"]').text());
+}
+</script>
+```
+
+### data()とattr()の違い
+* data()で取得・書き換えを行うのはDOMオブジェクト
+* attr()で取得・書き換えを行うのはHTMLの属性
+
+⇒ data()でdata-〇〇属性を書き換えた後、[data-〇〇]でcssを設定している場合もcssは反映されない
+⇒ attr()で値を変更した後data()で取得しても書き換えた後の値にならない
